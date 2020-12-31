@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from unittest.mock import patch, Mock, MagicMock, PropertyMock
 from S3 import *
-from S3Inventory import S3Inventory, AthenaS3Object
+from S3Inventory import S3Inventory, AthenaS3Object, WriteResults
 
 
 class S3InventoryUnitTests(unittest.TestCase):
@@ -95,7 +95,7 @@ class S3InventoryUnitTests(unittest.TestCase):
         print(expected)
         self.assertEqual(results[0], expected)
 
-    def test_write_inventory__given_formatted_results__then_correct_count_returned(
+    def test_write_inventory__given_two_parents__then_correct_count_returned(
         self,
     ):
         # Arrange
@@ -125,7 +125,53 @@ class S3InventoryUnitTests(unittest.TestCase):
         )
 
         # Assert
-        self.assertEqual(results, 2)
+        expected = WriteResults(
+            line_count=2,
+            sample_lines=[
+                '"bucket","key","date","size","parent1","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket-1","dir1/dir2/file.txt","2020-01-01",100,"dir1","dir2","","","","","","","",""',
+            ],
+        )
+        self.assertEqual(results, expected)
+
+    def test_write_inventory__given_ten_parents__then_correct_count_returned(
+        self,
+    ):
+        # Arrange
+        input = [
+            AthenaS3Object(
+                bucket="bucket-1",
+                key="dir1/dir2/file.txt",
+                date="2020-01-01",
+                size=100,
+                parent1="a",
+                parent2="b",
+                parent3="c",
+                parent4="d",
+                parent5="e",
+                parent6="f",
+                parent7="g",
+                parent8="h",
+                parent9="i",
+                parent10="j",
+            )
+        ]
+        subject = S3Inventory("fake-bucket", S3FakeLocal())
+
+        # Act
+        results = subject.write_inventory_csv(
+            "inventory-results-bucket", "pictures", input
+        )
+
+        # Assert
+        expected = WriteResults(
+            line_count=2,
+            sample_lines=[
+                '"bucket","key","date","size","parent1","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket-1","dir1/dir2/file.txt","2020-01-01",100,"a","b","c","d","e","f","g","h","i","j"',
+            ],
+        )
+        self.assertEqual(results, expected)
 
 
 if __name__ == "__main__":

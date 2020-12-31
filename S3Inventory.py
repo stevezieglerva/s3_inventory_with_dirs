@@ -7,6 +7,8 @@ AthenaS3Object = namedtuple(
     "bucket key date size parent1 parent2 parent3 parent4 parent5 parent6 parent7 parent8 parent9 parent10",
 )
 
+WriteResults = namedtuple("WriteResults", "line_count sample_lines")
+
 
 class S3Inventory:
     def __init__(self, bucket, s3_injection=S3()):
@@ -57,7 +59,7 @@ class S3Inventory:
     def write_inventory_csv(
         self, destination_bucket, destination_prefix, formatted_s3_objects
     ):
-        file_text = '"bucket","key","date","size","parent1"\n'
+        file_text = '"bucket","key","date","size","parent1","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"\n'
         for object in formatted_s3_objects:
             file_text = (
                 file_text
@@ -66,4 +68,8 @@ class S3Inventory:
         self.s3.put_object(
             destination_bucket, f"{destination_prefix}/inventory.csv", file_text
         )
-        return file_text.count("\n")
+        sample_lines = file_text.split("\n")[0:2]
+        results = WriteResults(
+            line_count=file_text.count("\n"), sample_lines=sample_lines
+        )
+        return results
