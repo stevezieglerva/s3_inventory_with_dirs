@@ -56,6 +56,45 @@ class S3InventoryUnitTests(unittest.TestCase):
         print(expected)
         self.assertEqual(results[0], expected)
 
+    def test_format_for_athena__given_one_file_with_10_folders__then_results_formatted_correctly(
+        self,
+    ):
+        # Arrange
+        input = [
+            S3Object(
+                bucket="fake-bucket",
+                key="a/b/c/d/e/f/g/h/i/j/object_1",
+                date="2020-01-01",
+                size=100,
+            )
+        ]
+        subject = S3Inventory("fake-bucket", S3FakeLocal)
+
+        # Act
+        results = subject.format_for_athena(input)
+
+        # Assert
+        self.assertGreater(len(results), 0)
+        expected = AthenaS3Object(
+            bucket=input[0].bucket,
+            key=input[0].key,
+            date=input[0].date,
+            size=input[0].size,
+            parent1="a",
+            parent2="b",
+            parent3="c",
+            parent4="d",
+            parent5="e",
+            parent6="f",
+            parent7="g",
+            parent8="h",
+            parent9="i",
+            parent10="j",
+        )
+        print(results[0])
+        print(expected)
+        self.assertEqual(results[0], expected)
+
 
 if __name__ == "__main__":
     unittest.main()
