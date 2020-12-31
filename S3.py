@@ -1,6 +1,7 @@
 import json
 from abc import ABC, abstractmethod
 from collections import namedtuple
+from datetime import datetime
 
 
 import boto3
@@ -77,7 +78,9 @@ class S3FakeLocal(S3Base):
         filename = f"test_fakes3_integration_{bucket}__{key}"
         with open(filename, "w") as file:
             file.write(data)
-        result = app.S3Object(bucket="local", key=filename)
+        result = S3Object(
+            bucket="local", key=filename, date=datetime.now().isoformat, size=len(data)
+        )
         return result
 
     def list_objects(self, bucket, prefix, total_max=0):

@@ -8,7 +8,7 @@ from S3Inventory import S3Inventory, AthenaS3Object
 class S3InventoryUnitTests(unittest.TestCase):
     def test_get_s3_files__given_valid_prefix__then_correct_formatted_returned(self):
         # Arrange
-        subject = S3Inventory("fake-bucket", S3FakeLocal)
+        subject = S3Inventory("fake-bucket", S3FakeLocal())
 
         # Act
         with mock.patch(
@@ -29,7 +29,7 @@ class S3InventoryUnitTests(unittest.TestCase):
                 bucket="fake-bucket", key="dir1/object_1", date="2020-01-01", size=100
             )
         ]
-        subject = S3Inventory("fake-bucket", S3FakeLocal)
+        subject = S3Inventory("fake-bucket", S3FakeLocal())
 
         # Act
         results = subject.format_for_athena(input)
@@ -68,7 +68,7 @@ class S3InventoryUnitTests(unittest.TestCase):
                 size=100,
             )
         ]
-        subject = S3Inventory("fake-bucket", S3FakeLocal)
+        subject = S3Inventory("fake-bucket", S3FakeLocal())
 
         # Act
         results = subject.format_for_athena(input)
@@ -94,6 +94,38 @@ class S3InventoryUnitTests(unittest.TestCase):
         print(results[0])
         print(expected)
         self.assertEqual(results[0], expected)
+
+    def test_write_inventory__given_formatted_results__then_correct_count_returned(
+        self,
+    ):
+        # Arrange
+        input = [
+            AthenaS3Object(
+                bucket="bucket-1",
+                key="dir1/dir2/file.txt",
+                date="2020-01-01",
+                size=100,
+                parent1="dir1",
+                parent2="dir2",
+                parent3="",
+                parent4="",
+                parent5="",
+                parent6="",
+                parent7="",
+                parent8="",
+                parent9="",
+                parent10="",
+            )
+        ]
+        subject = S3Inventory("fake-bucket", S3FakeLocal())
+
+        # Act
+        results = subject.write_inventory_csv(
+            "inventory-results-bucket", "pictures", input
+        )
+
+        # Assert
+        self.assertEqual(results, 1)
 
 
 if __name__ == "__main__":
