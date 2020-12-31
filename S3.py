@@ -1,6 +1,7 @@
 import json
 from abc import ABC, abstractmethod
 from collections import namedtuple
+import inspect
 
 import boto3
 
@@ -30,6 +31,7 @@ class S3(S3Base):
         return result
 
     def list_objects(self, bucket, prefix, total_max=0):
+        print(locals())
         s3 = boto3.client("s3")
         results = []
         continuation_token = "start"
@@ -79,4 +81,4 @@ class S3FakeLocal(S3Base):
         return result
 
     def list_objects(self, bucket, prefix, total_max=0):
-        pass
+        raise NotImplementedError
