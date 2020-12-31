@@ -1,0 +1,1 @@
+# s3_inventory_with_dirs
