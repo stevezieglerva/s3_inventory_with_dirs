@@ -24,7 +24,9 @@ class S3InventoryUnitTests(unittest.TestCase):
         self,
     ):
         # Arrange
-        input = []
+        input = [
+            S3Object(bucket="fake-bucket", key="object_1", date="2020-01-01", size=100)
+        ]
         subject = S3Inventory("fake-bucket", S3FakeLocal)
 
         # Act

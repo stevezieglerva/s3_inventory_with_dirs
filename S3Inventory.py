@@ -2,7 +2,7 @@ from S3 import *
 from collections import namedtuple
 
 
-S3Object = namedtuple("S3Object", "bucket key date size")
+AthenaS3Object = namedtuple("AthenaS3Object", "bucket key date size parent1")
 
 
 class S3Inventory:
@@ -15,3 +15,16 @@ class S3Inventory:
         print(f"get_s3_files: bucket={self.bucket}, prefix={prefix}, s3={S3}")
         files = self.s3.list_objects(self.bucket, prefix, 0)
         return files
+
+    def format_for_athena(self, s3_objects):
+        results = []
+        for object in s3_objects:
+            new_athena = AthenaS3Object(
+                bucket=object.bucket,
+                key=object.key,
+                date=object.date,
+                size=object.size,
+                parent1="",
+            )
+            results.append(new_athena)
+        return results
