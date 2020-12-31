@@ -127,3 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+s3_inventory_with_dirs.code-workspace
+reports/**/**
