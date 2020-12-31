@@ -125,7 +125,7 @@ class S3InventoryUnitTests(unittest.TestCase):
         )
 
         # Assert
-        self.assertEqual(results, 1)
+        self.assertEqual(results, 2)
 
 
 if __name__ == "__main__":

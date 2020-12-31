@@ -61,8 +61,9 @@ class S3Inventory:
         for object in formatted_s3_objects:
             file_text = (
                 file_text
-                + f'"{object.bucket}","{object.key}","{object.date}",{object.size},"{object.parent1}","{object.parent2}","{object.parent3}","{object.parent4}","{object.parent5}","{object.parent6}","{object.parent7}","{object.parent8}","{object.parent9}","{object.parent10}"'
+                + f'"{object.bucket}","{object.key}","{object.date}",{object.size},"{object.parent1}","{object.parent2}","{object.parent3}","{object.parent4}","{object.parent5}","{object.parent6}","{object.parent7}","{object.parent8}","{object.parent9}","{object.parent10}"\n'
             )
         self.s3.put_object(
             destination_bucket, f"{destination_prefix}/inventory.csv", file_text
         )
+        return file_text.count("\n")
