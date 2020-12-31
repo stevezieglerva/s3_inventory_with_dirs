@@ -1,4 +1,8 @@
 from S3 import *
+from collections import namedtuple
+
+
+S3Object = namedtuple("S3Object", "bucket key date size")
 
 
 class S3Inventory:

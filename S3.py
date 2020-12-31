@@ -1,7 +1,7 @@
 import json
 from abc import ABC, abstractmethod
 from collections import namedtuple
-import inspect
+
 
 import boto3
 
