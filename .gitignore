@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 s3_inventory_with_dirs.code-workspace
 reports/**/**
+inventory.csv
+inventory.xlsx
