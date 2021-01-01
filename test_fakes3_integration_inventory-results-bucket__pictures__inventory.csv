@@ -1,2 +1,2 @@
-"bucket","key","date","size","parent1","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"
+"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"
 "bucket-1","dir1/dir2/file.txt","2020-01-01",100,"dir1","dir2","","","","","","","",""

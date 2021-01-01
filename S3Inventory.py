@@ -16,6 +16,14 @@ class S3Inventory:
         self.s3 = s3_injection
         pass
 
+    def create_inventory(self, destination_bucket, destination_prefix, source_prefix):
+        objects = self.get_s3_files(source_prefix)
+        athena_formatted = self.format_for_athena(objects)
+        results = self.write_inventory_csv(
+            destination_bucket, destination_prefix, athena_formatted
+        )
+        return results
+
     def get_s3_files(self, prefix):
         print(f"get_s3_files: bucket={self.bucket}, prefix={prefix}, s3={S3}")
         files = self.s3.list_objects(self.bucket, prefix, 0)
@@ -24,18 +32,18 @@ class S3Inventory:
     def format_for_athena(self, s3_objects):
         results = []
         parent_options = [f"parent{i}" for i in range(1, 11)]
-        empty_parent_values = {}
-        for parent in parent_options:
-            empty_parent_values[parent] = ""
 
         for object in s3_objects:
+            empty_parent_values = {}
+            for parent in parent_options:
+                empty_parent_values[parent] = ""
+
             parent_values = empty_parent_values
             folders = object.key.split("/")[:-1]
             for count, folder in enumerate(folders):
                 index_number = count + 1
                 index = f"parent{index_number}"
                 parent_values[index] = folder
-            print(parent_values)
 
             new_athena = AthenaS3Object(
                 bucket=object.bucket,
@@ -59,7 +67,7 @@ class S3Inventory:
     def write_inventory_csv(
         self, destination_bucket, destination_prefix, formatted_s3_objects
     ):
-        file_text = '"bucket","key","date","size","parent1","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"\n'
+        file_text = '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"\n'
         for object in formatted_s3_objects:
             file_text = (
                 file_text

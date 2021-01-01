@@ -28,7 +28,9 @@ class S3(S3Base):
         s3 = boto3.client("s3")
         resp = s3.put_object(Bucket=bucket, Key=key, Body=data)
         print(f"key: {key} resp {resp}")
-        result = S3Object(bucket=bucket, key=key)
+        result = S3Object(
+            bucket=bucket, key=key, date=datetime.now().isoformat, size=len(data)
+        )
         return result
 
     def list_objects(self, bucket, prefix, total_max=0):
@@ -56,8 +58,9 @@ class S3(S3Base):
                 results.extend(response["Contents"])
             print(f"\tTotal objects: {len(results)}")
             continuation_token = response.get("NextContinuationToken", False)
-            if len(results) >= total_max:
+            if total_max > 0 and len(results) >= total_max:
                 continuation_token = ""
+                print("Stopping since total_max hit")
 
         s3_results = []
         for object in results:

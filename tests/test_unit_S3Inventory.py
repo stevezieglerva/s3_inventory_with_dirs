@@ -128,7 +128,7 @@ class S3InventoryUnitTests(unittest.TestCase):
         expected = WriteResults(
             line_count=2,
             sample_lines=[
-                '"bucket","key","date","size","parent1","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
                 '"bucket-1","dir1/dir2/file.txt","2020-01-01",100,"dir1","dir2","","","","","","","",""',
             ],
         )
@@ -167,10 +167,100 @@ class S3InventoryUnitTests(unittest.TestCase):
         expected = WriteResults(
             line_count=2,
             sample_lines=[
-                '"bucket","key","date","size","parent1","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
                 '"bucket-1","dir1/dir2/file.txt","2020-01-01",100,"a","b","c","d","e","f","g","h","i","j"',
             ],
         )
+        self.assertEqual(results, expected)
+
+    def test_write_inventory__given_several_rows__then_correct_count_returned(
+        self,
+    ):
+        # Arrange
+        input = [
+            AthenaS3Object(
+                bucket="bucket-1",
+                key="a/b/c/d/e/f/g/h/i/j/file.txt",
+                date="2020-01-01",
+                size=100,
+                parent1="a",
+                parent2="b",
+                parent3="c",
+                parent4="d",
+                parent5="e",
+                parent6="f",
+                parent7="g",
+                parent8="h",
+                parent9="i",
+                parent10="j",
+            ),
+            AthenaS3Object(
+                bucket="bucket-1",
+                key="a/b/file.txt",
+                date="2020-01-01",
+                size=100,
+                parent1="a",
+                parent2="b",
+                parent3="",
+                parent4="",
+                parent5="",
+                parent6="",
+                parent7="",
+                parent8="",
+                parent9="",
+                parent10="",
+            ),
+            AthenaS3Object(
+                bucket="bucket-1",
+                key="a/file.txt",
+                date="2020-01-01",
+                size=100,
+                parent1="a",
+                parent2="",
+                parent3="",
+                parent4="",
+                parent5="",
+                parent6="",
+                parent7="",
+                parent8="",
+                parent9="",
+                parent10="",
+            ),
+            AthenaS3Object(
+                bucket="bucket-1",
+                key="a/b/file2.txt",
+                date="2020-01-01",
+                size=100,
+                parent1="a",
+                parent2="b",
+                parent3="",
+                parent4="",
+                parent5="",
+                parent6="",
+                parent7="",
+                parent8="",
+                parent9="",
+                parent10="",
+            ),
+        ]
+        subject = S3Inventory("fake-bucket", S3FakeLocal())
+
+        # Act
+        results = subject.write_inventory_csv(
+            "inventory-results-bucket", "pictures", input
+        )
+
+        # Assert
+        expected = WriteResults(
+            line_count=5,
+            sample_lines=[
+                '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket-1","a/b/c/d/e/f/g/h/i/j/file.txt","2020-01-01",100,"a","b","c","d","e","f","g","h","i","j"',
+            ],
+        )
+        print("\n\n")
+        print(results)
+        print(expected)
         self.assertEqual(results, expected)
 
 
