@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from unittest.mock import patch, Mock, MagicMock, PropertyMock
 from S3 import *
-from S3Inventory import S3Inventory, AthenaS3Object, WriteResults
+from S3Inventory import S3Inventory, CSVS3Object, WriteResults
 
 
 class S3InventoryUnitTests(unittest.TestCase):
@@ -20,7 +20,7 @@ class S3InventoryUnitTests(unittest.TestCase):
         # Assert
         self.assertGreater(len(results), 0)
 
-    def test_format_for_athena__given_one_file__then_results_formatted_correctly(
+    def test_format_for_csv__given_one_file__then_results_formatted_correctly(
         self,
     ):
         # Arrange
@@ -32,11 +32,11 @@ class S3InventoryUnitTests(unittest.TestCase):
         subject = S3Inventory("fake-bucket", S3FakeLocal())
 
         # Act
-        results = subject.format_for_athena(input)
+        results = subject.format_for_csv(input)
 
         # Assert
         self.assertGreater(len(results), 0)
-        expected = AthenaS3Object(
+        expected = CSVS3Object(
             bucket=input[0].bucket,
             key=input[0].key,
             date=input[0].date,
@@ -56,7 +56,7 @@ class S3InventoryUnitTests(unittest.TestCase):
         print(expected)
         self.assertEqual(results[0], expected)
 
-    def test_format_for_athena__given_one_file_with_10_folders__then_results_formatted_correctly(
+    def test_format_for_csv__given_one_file_with_10_folders__then_results_formatted_correctly(
         self,
     ):
         # Arrange
@@ -71,11 +71,11 @@ class S3InventoryUnitTests(unittest.TestCase):
         subject = S3Inventory("fake-bucket", S3FakeLocal())
 
         # Act
-        results = subject.format_for_athena(input)
+        results = subject.format_for_csv(input)
 
         # Assert
         self.assertGreater(len(results), 0)
-        expected = AthenaS3Object(
+        expected = CSVS3Object(
             bucket=input[0].bucket,
             key=input[0].key,
             date=input[0].date,
@@ -100,7 +100,7 @@ class S3InventoryUnitTests(unittest.TestCase):
     ):
         # Arrange
         input = [
-            AthenaS3Object(
+            CSVS3Object(
                 bucket="bucket-1",
                 key="dir1/dir2/file.txt",
                 date="2020-01-01",
@@ -139,7 +139,7 @@ class S3InventoryUnitTests(unittest.TestCase):
     ):
         # Arrange
         input = [
-            AthenaS3Object(
+            CSVS3Object(
                 bucket="bucket-1",
                 key="dir1/dir2/file.txt",
                 date="2020-01-01",
@@ -178,7 +178,7 @@ class S3InventoryUnitTests(unittest.TestCase):
     ):
         # Arrange
         input = [
-            AthenaS3Object(
+            CSVS3Object(
                 bucket="bucket-1",
                 key="a/b/c/d/e/f/g/h/i/j/file.txt",
                 date="2020-01-01",
@@ -194,7 +194,7 @@ class S3InventoryUnitTests(unittest.TestCase):
                 parent9="i",
                 parent10="j",
             ),
-            AthenaS3Object(
+            CSVS3Object(
                 bucket="bucket-1",
                 key="a/b/file.txt",
                 date="2020-01-01",
@@ -210,7 +210,7 @@ class S3InventoryUnitTests(unittest.TestCase):
                 parent9="",
                 parent10="",
             ),
-            AthenaS3Object(
+            CSVS3Object(
                 bucket="bucket-1",
                 key="a/file.txt",
                 date="2020-01-01",
@@ -226,7 +226,7 @@ class S3InventoryUnitTests(unittest.TestCase):
                 parent9="",
                 parent10="",
             ),
-            AthenaS3Object(
+            CSVS3Object(
                 bucket="bucket-1",
                 key="a/b/file2.txt",
                 date="2020-01-01",

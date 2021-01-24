@@ -2,8 +2,8 @@ from S3 import *
 from collections import namedtuple
 
 
-AthenaS3Object = namedtuple(
-    "AthenaS3Object",
+CSVS3Object = namedtuple(
+    "CSVS3Object",
     "bucket key date size parent1 parent2 parent3 parent4 parent5 parent6 parent7 parent8 parent9 parent10",
 )
 
@@ -18,7 +18,7 @@ class S3Inventory:
 
     def create_inventory(self, destination_bucket, destination_prefix, source_prefix):
         objects = self.get_s3_files(source_prefix)
-        athena_formatted = self.format_for_athena(objects)
+        athena_formatted = self.format_for_csv(objects)
         results = self.write_inventory_csv(
             destination_bucket, destination_prefix, athena_formatted
         )
@@ -29,7 +29,7 @@ class S3Inventory:
         files = self.s3.list_objects(self.bucket, prefix, 0)
         return files
 
-    def format_for_athena(self, s3_objects):
+    def format_for_csv(self, s3_objects):
         results = []
         parent_options = [f"parent{i}" for i in range(1, 11)]
 
@@ -45,7 +45,7 @@ class S3Inventory:
                 index = f"parent{index_number}"
                 parent_values[index] = folder
 
-            new_athena = AthenaS3Object(
+            new_athena = CSVS3Object(
                 bucket=object.bucket,
                 key=object.key,
                 date=object.date,

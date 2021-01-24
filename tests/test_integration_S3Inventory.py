@@ -20,7 +20,9 @@ class S3InventoryIntegrationTests(unittest.TestCase):
         subject = S3Inventory("svz-master-pictures-new", S3())
 
         # Act
-        results = subject.create_inventory("svz-master-pictures-new", "inventory", "")
+        results = subject.create_inventory(
+            "svz-master-pictures-new", "inventory", "failed"
+        )
 
         # Assert
         self.assertGreater(len(results), 0)
