@@ -14,7 +14,6 @@ class S3Inventory:
     def __init__(self, bucket, s3_injection=S3()):
         self.bucket = bucket
         self.s3 = s3_injection
-        pass
 
     def create_inventory(self, destination_bucket, destination_prefix, source_prefix):
         objects = self.get_s3_files(source_prefix)
@@ -73,9 +72,9 @@ class S3Inventory:
                 file_text
                 + f'"{object.bucket}","{object.key}","{object.date}",{object.size},"{object.parent1}","{object.parent2}","{object.parent3}","{object.parent4}","{object.parent5}","{object.parent6}","{object.parent7}","{object.parent8}","{object.parent9}","{object.parent10}"\n'
             )
-        self.s3.put_object(
-            destination_bucket, f"{destination_prefix}/inventory.csv", file_text
-        )
+        key = f"{destination_prefix}/inventory.csv"
+        print(f"Writing to: {key}")
+        self.s3.put_object(destination_bucket, key, file_text)
         sample_lines = file_text.split("\n")[0:2]
         results = WriteResults(
             line_count=file_text.count("\n"), sample_lines=sample_lines
