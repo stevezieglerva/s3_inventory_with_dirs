@@ -13,11 +13,14 @@ class ThreadWorker(Thread):
             value = self.queue.get()
             try:
                 s3 = S3Inventory(
-                    "svz-master-pictures",
+                    "svz-master-pictures-new",
                 )
                 print(f"\n\n\n*** Getting inventory from: {value}")
+                inventory_file_suffix = value.replace("/", "__")
                 s3.create_inventory(
-                    "svz-master-pictures-new", f"inventory/{value}", value
+                    "svz-master-pictures-new",
+                    f"inventory/{inventory_file_suffix}",
+                    value,
                 )
             finally:
                 self.queue.task_done()
