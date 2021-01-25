@@ -14,18 +14,41 @@ do
     export pattern="original"
     export original="$(grep -E "$pattern/$i" inventory_pre_delete.csv | wc -l)"
     export latest="$(grep -E "$pattern/$i" get_inventory_files_from_s3/inventory/_inventory.csv | wc -l)"
-    export dropbox="$(grep -E "$pattern/$i" dropbox_sync_s3.txt | wc -l)"
-    echo "$pattern/$i $original -> $latest | $dropbox"
+    export starred="$(grep -E "Master Starred Pictures.*$i" external_drive_find_output/all_pictures_drive_a_beatup.txt | wc -l)"
+    echo "$pattern/$i $original -> $latest | $starred"
 done
 
-echo "******"
 
+echo "******"
 export pattern="original-backup"
 export original="$(grep -E "$pattern" inventory_pre_delete.csv | wc -l)"
 export latest="$(grep -E "$pattern" get_inventory_files_from_s3/inventory/_inventory.csv | wc -l)"
 echo "$pattern $original -> $latest"
 
+for i in $(seq 2020 -1 2003) 
+do
+    export pattern="original-backup"
+    export original="$(grep -E "$pattern/$i" inventory_pre_delete.csv | wc -l)"
+    export latest="$(grep -E "$pattern/$i" get_inventory_files_from_s3/inventory/_inventory.csv | wc -l)"
+    echo "$pattern/$i $original -> $latest | $dropbox"
+done
 
+
+echo "******"
+export pattern="processed"
+export original="$(grep -E "$pattern" inventory_pre_delete.csv | wc -l)"
+export latest="$(grep -E "$pattern" get_inventory_files_from_s3/inventory/_inventory.csv | wc -l)"
+echo "$pattern $original -> $latest"
+
+for i in $(seq 2020 -1 2003) 
+do
+    export pattern="processed"
+    export original="$(grep -E "$pattern/$i" inventory_pre_delete.csv | wc -l)"
+    export latest="$(grep -E "$pattern/$i" get_inventory_files_from_s3/inventory/_inventory.csv | wc -l)"
+    echo "$pattern/$i $original -> $latest | $dropbox"
+done
+
+echo "******"
 export pattern="small"
 export original="$(grep -E "$pattern" inventory_pre_delete.csv | wc -l)"
 export latest="$(grep -E "$pattern" get_inventory_files_from_s3/inventory/_inventory.csv | wc -l)"
