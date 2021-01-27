@@ -1,0 +1,1 @@
+s3://svz-master-pictures-new/inventory/svz-master-pictures-new/all_objects/data/c305a337-d6bd-4366-a15f-c4c4fb0494ce.csv.gz

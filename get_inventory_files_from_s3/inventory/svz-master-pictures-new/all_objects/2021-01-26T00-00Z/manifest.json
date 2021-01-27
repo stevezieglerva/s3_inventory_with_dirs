@@ -1,0 +1,13 @@
+{
+  "sourceBucket" : "svz-master-pictures-new",
+  "destinationBucket" : "arn:aws:s3:::svz-master-pictures-new",
+  "version" : "2016-11-30",
+  "creationTimestamp" : "1611619200000",
+  "fileFormat" : "CSV",
+  "fileSchema" : "Bucket, Key, Size, LastModifiedDate",
+  "files" : [ {
+    "key" : "inventory/svz-master-pictures-new/all_objects/data/27aa8536-dc80-48be-a999-d4394fa14822.csv.gz",
+    "size" : 1922487,
+    "MD5checksum" : "8969c31abc5182403938af45566b8bbb"
+  } ]
+}
