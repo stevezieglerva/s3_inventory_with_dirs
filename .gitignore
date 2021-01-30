@@ -132,3 +132,4 @@ reports/**/**
 inventory.csv
 inventory.xlsx
 **/**/all_pictures*.*
+clean_deletion_copy_script.sh

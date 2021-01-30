@@ -1,5 +1,9 @@
 import json
 
+
+# Reads inventory list pre-deletion and tries to find it in an inventory of files on the external backup, then creates a sh script to copy
+# to the upload directory
+
 print("*** original files:")
 with open("inventory_pre_delete.csv", "r") as file:
     lines = file.readlines()
@@ -25,6 +29,11 @@ with open("external_drive_find_output/all_pictures_drive_a_beatup.txt", "r") as 
 count = len(external_file_lookup)
 print(f"External filenames: {count}")
 
+sh_text = ""
 for file in original_keys:
     lookup = external_file_lookup[file]
     print(f"{file} -> {lookup}")
+    sh_text = sh_text + f"echo 'Copying '{lookup}' ...' \n"
+
+with open("clean_deletion_copy_script.sh", "w") as file:
+    file.write(sh_text)
