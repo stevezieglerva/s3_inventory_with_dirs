@@ -30,10 +30,18 @@ count = len(external_file_lookup)
 print(f"External filenames: {count}")
 
 sh_text = ""
-for file in original_keys:
+for count, file in enumerate(original_keys):
     lookup = external_file_lookup[file]
-    print(f"{file} -> {lookup}")
-    sh_text = sh_text + f"echo 'Copying '{lookup}' ...' \n"
+    absolute_filename = lookup.replace(
+        "./Master Starred Pictures/",
+        "/Volumes/My Passport/ZieglerPics/Master Starred Pictures/",
+    )
+    print(f"{file} -> {absolute_filename}")
+    sh_text = sh_text + f"echo \"Copying #{count} '{absolute_filename}' ...\" \n"
+    sh_text = (
+        sh_text
+        + f'cp "{absolute_filename}" "/Users/sziegler/Dropbox/ZieglerPics/Master Starred Pictures/copy between computers/Upload" \n\n'
+    )
 
 with open("clean_deletion_copy_script.sh", "w") as file:
     file.write(sh_text)
