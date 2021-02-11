@@ -3,6 +3,7 @@ from unittest import mock
 from unittest.mock import patch, Mock, MagicMock, PropertyMock
 from S3 import *
 from S3Inventory import S3Inventory, CSVS3Object, WriteResults
+from datetime import datetime
 
 
 class S3InventoryUnitTests(unittest.TestCase):
@@ -28,7 +29,7 @@ class S3InventoryUnitTests(unittest.TestCase):
             S3Object(
                 bucket="fake-bucket",
                 key="dir1/object_1",
-                date="2020-07-15T00:00:00",
+                date=datetime(2020, 7, 15),
                 size=100,
             )
         ]
@@ -69,7 +70,7 @@ class S3InventoryUnitTests(unittest.TestCase):
             S3Object(
                 bucket="fake-bucket",
                 key="a/b/c/d/e/f/g/h/i/j/object_1",
-                date="2020-07-15T00:00:00",
+                date=datetime(2020, 7, 15),
                 size=100,
             )
         ]

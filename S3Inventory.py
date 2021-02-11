@@ -44,10 +44,7 @@ class S3Inventory:
                 index_number = count + 1
                 index = f"parent{index_number}"
                 parent_values[index] = folder
-
-            print(f"object.date: {object.date}")
-            date = datetime.strptime(object.date, "%Y-%m-%dT%H:%M:%S")
-            print(f"{object.date} {date}")
+            date = object.date
             year = date.year
             month = date.month
             day = date.day
