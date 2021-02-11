@@ -78,11 +78,11 @@ class S3Inventory:
     def write_inventory_csv(
         self, destination_bucket, destination_prefix, formatted_s3_objects
     ):
-        file_text = '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"\n'
+        file_text = '"bucket","key","timestamp","date","year","month","day","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"\n'
         for object in formatted_s3_objects:
             file_text = (
                 file_text
-                + f'"{object.bucket}","{object.key}","{object.date}",{object.size},"{object.parent1}","{object.parent2}","{object.parent3}","{object.parent4}","{object.parent5}","{object.parent6}","{object.parent7}","{object.parent8}","{object.parent9}","{object.parent10}"\n'
+                + f'"{object.bucket}","{object.key}","{object.timestamp}","{object.date}","{object.year}","{object.month}","{object.day}",{object.size},"{object.parent1}","{object.parent2}","{object.parent3}","{object.parent4}","{object.parent5}","{object.parent6}","{object.parent7}","{object.parent8}","{object.parent9}","{object.parent10}"\n'
             )
         spacer = "_"
         if destination_prefix == "":

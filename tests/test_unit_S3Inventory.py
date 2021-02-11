@@ -109,7 +109,7 @@ class S3InventoryUnitTests(unittest.TestCase):
         input = [
             CSVS3Object(
                 bucket="bucket-1",
-                key="dir1/dir2/file.txt",
+                key="dir1/dir2/two_parents.txt",
                 timestamp="2020-01-01T00:00:00",
                 date="2020-01-01",
                 year=2020,
@@ -139,10 +139,13 @@ class S3InventoryUnitTests(unittest.TestCase):
         expected = WriteResults(
             line_count=2,
             sample_lines=[
-                '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
-                '"bucket-1","dir1/dir2/file.txt","2020-01-01",100,"dir1","dir2","","","","","","","",""',
+                '"bucket","key","timestamp","date","year","month","day","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket-1","dir1/dir2/two_parents.txt","2020-01-01T00:00:00","2020-01-01","2020","1","1",100,"dir1","dir2","","","","","","","",""',
             ],
         )
+        print("\n\n")
+        print(results)
+        print(expected)
         self.assertEqual(results, expected)
 
     def test_write_inventory__given_ten_parents__then_correct_count_returned(
@@ -152,7 +155,7 @@ class S3InventoryUnitTests(unittest.TestCase):
         input = [
             CSVS3Object(
                 bucket="bucket-1",
-                key="dir1/dir2/file.txt",
+                key="dir1/dir2/ten_parents.txt",
                 timestamp="2020-01-01T00:00:00",
                 date="2020-01-01",
                 year=2020,
@@ -182,10 +185,13 @@ class S3InventoryUnitTests(unittest.TestCase):
         expected = WriteResults(
             line_count=2,
             sample_lines=[
-                '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
-                '"bucket-1","dir1/dir2/file.txt","2020-01-01",100,"a","b","c","d","e","f","g","h","i","j"',
+                '"bucket","key","timestamp","date","year","month","day","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket-1","dir1/dir2/ten_parents.txt","2020-01-01T00:00:00","2020-01-01","2020","1","1",100,"a","b","c","d","e","f","g","h","i","j"',
             ],
         )
+        print("\n\n")
+        print(results)
+        print(expected)
         self.assertEqual(results, expected)
 
     def test_write_inventory__given_several_rows__then_correct_count_returned(
@@ -285,13 +291,10 @@ class S3InventoryUnitTests(unittest.TestCase):
         expected = WriteResults(
             line_count=5,
             sample_lines=[
-                '"bucket","key","date","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
-                '"bucket-1","a/b/c/d/e/f/g/h/i/j/file.txt","2020-01-01",100,"a","b","c","d","e","f","g","h","i","j"',
+                '"bucket","key","timestamp","date","year","month","day","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"',
+                '"bucket-1","a/b/c/d/e/f/g/h/i/j/file.txt","2020-01-01T00:00:00","2020-01-01","2020","1","1",100,"a","b","c","d","e","f","g","h","i","j"',
             ],
         )
-        print("\n\n")
-        print(results)
-        print(expected)
         self.assertEqual(results, expected)
 
 
