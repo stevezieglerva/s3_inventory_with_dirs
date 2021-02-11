@@ -133,3 +133,4 @@ inventory.csv
 inventory.xlsx
 **/**/all_pictures*.*
 clean_deletion_copy_script.sh
+gw_ops_aws_tests/**/**

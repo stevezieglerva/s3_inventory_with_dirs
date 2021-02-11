@@ -1,10 +1,11 @@
 from S3 import *
 from collections import namedtuple
+from datetime import datetime
 
 
 CSVS3Object = namedtuple(
     "CSVS3Object",
-    "bucket key date size parent1 parent2 parent3 parent4 parent5 parent6 parent7 parent8 parent9 parent10",
+    "bucket key timestamp date year month day size parent1 parent2 parent3 parent4 parent5 parent6 parent7 parent8 parent9 parent10",
 )
 
 WriteResults = namedtuple("WriteResults", "line_count sample_lines")
@@ -44,10 +45,21 @@ class S3Inventory:
                 index = f"parent{index_number}"
                 parent_values[index] = folder
 
+            print(f"object.date: {object.date}")
+            date = datetime.strptime(object.date, "%Y-%m-%dT%H:%M:%S")
+            print(f"{object.date} {date}")
+            year = date.year
+            month = date.month
+            day = date.day
+
             new_athena = CSVS3Object(
                 bucket=object.bucket,
                 key=object.key,
-                date=object.date,
+                timestamp=object.date,
+                date=date.strftime("%Y-%m-%d"),
+                year=year,
+                month=month,
+                day=day,
                 size=object.size,
                 parent1=parent_values["parent1"],
                 parent2=parent_values["parent2"],
