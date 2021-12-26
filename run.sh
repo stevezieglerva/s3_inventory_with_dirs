@@ -4,22 +4,22 @@ aws s3 cp s3://svz-master-pictures-new/inventory/_inventory.csv ./get_inventory_
 
 # Check the various count
 
-export year="2012"
+export year="2011"
 echo "$year"
-grep -E "$year" _inventory.csv | wc -l
+grep -E "$year" ./get_inventory_files_from_s3/inventory/_inventory.csv | wc -l
 
 export year="2012"
 echo "$year"
-grep -E "$year" _inventory.csv | wc -l
+grep -E "$year" ./get_inventory_files_from_s3/inventory/_inventory.csv | wc -l
 
 export year="2018"
 echo "$year"
-grep -E "$year" _inventory.csv | wc -l
+grep -E "$year" ./get_inventory_files_from_s3/inventory/_inventory.csv | wc -l
 
 export year="2019"
 echo "$year"
-grep -E "$year" _inventory.csv | wc -l
+grep -E "$year" ./get_inventory_files_from_s3/inventory/_inventory.csv | wc -l
 
 export year="2020"
 echo "$year"
-grep -E "$year" _inventory.csv | wc -l
+grep -E "$year" ./get_inventory_files_from_s3/inventory/_inventory.csv | wc -l
