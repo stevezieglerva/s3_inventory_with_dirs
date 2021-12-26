@@ -32,14 +32,16 @@ class S3Inventory:
 
     def _get_date_from_filename(self, filename: str) -> datetime:
         date_regex_dashes = re.compile(r"\d{4}-\d{2}-\d{2}")
-        date_str = re.search(date_regex_dashes, filename).group(0)
-        if date_str:
+        date_matches = re.search(date_regex_dashes, filename)
+        if date_matches:
+            date_str = date_matches.group(0)
             return datetime.strptime(date_str, "%Y-%m-%d")
         date_regex_underscores = re.compile(r"\d{4}_\d{2}_\d{2}")
-        date_str = re.search(date_regex_underscores, filename).group(0)
-        if date_str:
-            return datetime.strptime(date_str, "%Y-%m-%d")
-        return None
+        date_matches = re.search(date_regex_underscores, filename)
+        if date_matches:
+            date_str = date_matches.group(0)
+            return datetime.strptime(date_str, "%Y_%m_%d")
+        return datetime(1970, 1, 1)
 
     def format_for_csv(self, s3_objects):
         results = []
@@ -57,7 +59,6 @@ class S3Inventory:
                 index = f"parent{index_number}"
                 parent_values[index] = folder
             date = self._get_date_from_filename(object.key)
-            print(f"\n\ndate={date}")
             year = date.year
             month = date.month
             day = date.day
