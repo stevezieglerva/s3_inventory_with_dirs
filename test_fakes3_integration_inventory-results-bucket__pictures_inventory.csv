@@ -1,2 +1,0 @@
-"bucket","key","timestamp","date","year","month","day","size","parent1","parent2","parent3","parent4","parent5","parent6","parent7","parent8","parent9","parent10"
-"bucket-1","dir1/dir2/two_parents.txt","2020-01-01T00:00:00","2020-01-01","2020","1","1",100,"dir1","dir2","","","","","","","",""

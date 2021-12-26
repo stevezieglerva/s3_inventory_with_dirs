@@ -1,7 +1,8 @@
-from S3 import *
+import re
 from collections import namedtuple
 from datetime import datetime
 
+from S3 import *
 
 CSVS3Object = namedtuple(
     "CSVS3Object",
@@ -29,6 +30,17 @@ class S3Inventory:
         files = self.s3.list_objects(self.bucket, prefix, 0)
         return files
 
+    def _get_date_from_filename(self, filename: str) -> datetime:
+        date_regex_dashes = re.compile(r"\d{4}-\d{2}-\d{2}")
+        date_str = re.search(date_regex_dashes, filename).group(0)
+        if date_str:
+            return datetime.strptime(date_str, "%Y-%m-%d")
+        date_regex_underscores = re.compile(r"\d{4}_\d{2}_\d{2}")
+        date_str = re.search(date_regex_underscores, filename).group(0)
+        if date_str:
+            return datetime.strptime(date_str, "%Y-%m-%d")
+        return None
+
     def format_for_csv(self, s3_objects):
         results = []
         parent_options = [f"parent{i}" for i in range(1, 11)]
@@ -44,7 +56,8 @@ class S3Inventory:
                 index_number = count + 1
                 index = f"parent{index_number}"
                 parent_values[index] = folder
-            date = object.date
+            date = self._get_date_from_filename(object.key)
+            print(f"\n\ndate={date}")
             year = date.year
             month = date.month
             day = date.day
@@ -52,7 +65,7 @@ class S3Inventory:
             new_athena = CSVS3Object(
                 bucket=object.bucket,
                 key=object.key,
-                timestamp=object.date,
+                timestamp=date,
                 date=date.strftime("%Y-%m-%d"),
                 year=year,
                 month=month,
